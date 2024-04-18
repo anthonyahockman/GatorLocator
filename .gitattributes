@@ -1,0 +1,5 @@
+README.md filter=lfs diff=lfs merge=lfs -text
+edges.csv filter=lfs diff=lfs merge=lfs -text
+florida-latest.osm.pbf filter=lfs diff=lfs merge=lfs -text
+nodes.csv filter=lfs diff=lfs merge=lfs -text
+pyrosm_test.py filter=lfs diff=lfs merge=lfs -text
