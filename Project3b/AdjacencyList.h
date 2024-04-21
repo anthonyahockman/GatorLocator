@@ -22,7 +22,7 @@ struct Way {
     long long osm_id;
     double length;
     string type;
-    list<pair<float, float>> directions;
+    //list<pair<float, float>> directions;
 };
 
 class AdjacencyList {
@@ -35,7 +35,7 @@ class AdjacencyList {
 public:
     AdjacencyList();
     bool insertNode(long long &id, float &longitude, float &latitude);
-    bool insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type, list<pair<float, float>> &directions);
+    bool insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type);
     bool isNode(long long &id);
     bool isEdge(long long &osm_id);
 };

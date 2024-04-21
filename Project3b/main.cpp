@@ -60,19 +60,17 @@ int main() {
             getline(ss2, component, ',');
         }
         getline(ss2, component, ')');
-        stringstream ss3(component);
-        string nums;
-        list<pair<float, float>> dirs;
-        while (getline(ss3, nums, ',')) {
-            string num1;
-            string num2;
-            stringstream ss4(nums);
-            getline(ss4, num1, ' ');
-            getline(ss4, num1, ' ');
-            getline(ss4, num2, ' ');
-            float lon = stof(num1);
-            float lat = stof(num2);
-            dirs.emplace_back(lon, lat);
+        // if the way entry is a copy of another one, skip it
+        if (components[0].find("-0")==string::npos) {
+            continue;
+        }
+        // if the "way" is actually just a POI, skip it
+        if (component.find(',')==string::npos) {
+            continue;
+        }
+        // if the way is not driveable, skip it
+        if (components[6] == "Forbidden") {
+            continue;
         }
 
         long long from = stoll(components[2]);
@@ -81,7 +79,7 @@ int main() {
         double length = stod(components[4]);
         string type = components[6];
 
-        graph.insertEdge(from, to, osm_id, length, type, dirs);
+        graph.insertEdge(from, to, osm_id, length, type);
 
     }
     cout << "success!" << endl;
