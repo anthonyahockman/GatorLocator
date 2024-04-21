@@ -1,10 +1,9 @@
-#pragma once
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include "AdjacencyList.h"
+#include "AdjacencyList.cpp"
 
 using namespace std;
 

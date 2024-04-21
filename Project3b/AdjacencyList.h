@@ -4,11 +4,11 @@
 
 #ifndef PROJECT3B_ADJACENCYLIST_H
 #define PROJECT3B_ADJACENCYLIST_H
-#pragma once
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 #include <list>
+#include <string>
 
 using namespace std;
 
