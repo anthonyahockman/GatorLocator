@@ -42,7 +42,8 @@ public:
     bool insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type);
     bool isNode(long long &id);
     bool isEdge(long long &osm_id);
-    vector<pair<float, float>> dijkstraSearch(pair<float, float> start, pair<float, float> end);
+    vector<pair<float, float>> dijkstraSearch(pair<float, float> &start, pair<float, float> &end);
+    int getSpeed(long long &id);
 };
 
 
