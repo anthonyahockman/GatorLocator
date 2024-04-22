@@ -9,6 +9,8 @@
 #include <vector>
 #include <list>
 #include <string>
+#include <queue>
+#include <algorithm>
 
 using namespace std;
 
@@ -26,9 +28,11 @@ struct Way {
 };
 
 class AdjacencyList {
-    // store nodes with list of neighors
-    // each pair has the node belonging to the key id and the adjacent ids
-    unordered_map<long long, pair<Node*, unordered_map<long long, long long>>> adjacency;
+    // store nodes with list of neighbors
+    // the inner map has key of an adjacent node and the oms_id for the edge
+    unordered_map<long long, unordered_map<long long, long long>> adjacency;
+    // keep track of nodes and corresponding ids
+    unordered_map<long long, Node*> nodes;
     // store the list of edges with edge_id as the key
     // the list is the latitude, longitude way data from OSM
     unordered_map<long long, Way*> edges;
@@ -38,6 +42,7 @@ public:
     bool insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type);
     bool isNode(long long &id);
     bool isEdge(long long &osm_id);
+    vector<pair<float, float>> dijkstraSearch(pair<float, float> start, pair<float, float> end);
 };
 
 

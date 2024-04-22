@@ -15,32 +15,7 @@ int main() {
 
     AdjacencyList graph;
 
-    ifstream file("nodes.csv");
-    if (!file.is_open()) {
-        cerr << "Failed to open file\n";
-        return 1;
-    }
-    string line;
-    // deal with column headers
-    getline(file, line);
-    while (getline(file, line)) {
-        vector<string> components;
-        stringstream ss(line);
-        string component;
-
-        while (getline(ss, component, ',')) {
-            components.push_back(component);
-        }
-        long long id = stoll(components[0]);
-        float lon = stof(components[1]);
-        float lat = stof(components[2]);
-        graph.insertNode(id, lon, lat);
-    }
-
-    file.close();
-    cout << "success1" << endl;
-
-    ifstream file2("edges.csv");
+    ifstream file2("cmake-build-debug/edges.csv");
     string line2;
     // deal with column headers
     getline(file2, line2);
@@ -81,6 +56,36 @@ int main() {
         graph.insertEdge(from, to, osm_id, length, type);
 
     }
+    file2.close();
     cout << "success!" << endl;
+
+    ifstream file("cmake-build-debug/nodes.csv");
+    if (!file.is_open()) {
+        cerr << "Failed to open file\n";
+        return 1;
+    }
+    string line;
+    // deal with column headers
+    getline(file, line);
+    while (getline(file, line)) {
+        vector<string> components;
+        stringstream ss(line);
+        string component;
+
+        while (getline(ss, component, ',')) {
+            components.push_back(component);
+        }
+        long long id = stoll(components[0]);
+        float lon = stof(components[1]);
+        float lat = stof(components[2]);
+//        if (!graph.isNode(id)) {
+//            continue;
+//        }
+        graph.insertNode(id, lon, lat);
+    }
+
+    file.close();
+    cout << "success1" << endl;
+
     return 0;
 }
