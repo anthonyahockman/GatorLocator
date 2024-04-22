@@ -50,25 +50,31 @@ bool AdjacencyList::isEdge(long long &osm_id) {
 }
 
 // TODO: this needs to be tested
-vector<pair<float, float>> AdjacencyList::dijkstraSearch(pair<float, float> &start, pair<float, float> &end) {
-    long long startID;
-    long long endID;
-    // determine the actual id of each point based on latitude and longitude inputs
-    for (const auto& pair: nodes) {
-        if (pair.second->latitude == start.first && pair.second->longitude == start.second) {
-            startID = pair.second->id;
-        }
-        if (pair.second->latitude == end.first && pair.second->longitude == end.second) {
-            endID = pair.second->id;
-        }
-    }
+vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long &startID, long long &endID) {
+//    long long startID;
+//    long long endID;
+//    // determine the actual id of each point based on latitude and longitude inputs
+//    for (const auto& pair: nodes) {
+//        if (pair.second->latitude == start.first && pair.second->longitude == start.second) {
+//            startID = pair.second->id;
+//        }
+//        if (pair.second->latitude == end.first && pair.second->longitude == end.second) {
+//            endID = pair.second->id;
+//        }
+//    }
     // define a type of data for the priority queue
     typedef pair<double, long long> w;
     // start the priority queue
     priority_queue<w, vector<w>, greater<>> pq;
     // keep track of all the distances to each node
     unordered_map<long long, double> distance;
+
     distance.emplace(startID, 0);
+
+    // initialize the distance map values to large quantities
+    for (auto& v : nodes) {
+        distance.emplace(v.first, numeric_limits<long long>::max());
+    }
 
     pq.emplace(0, startID);
     // keep track of the parents of each node

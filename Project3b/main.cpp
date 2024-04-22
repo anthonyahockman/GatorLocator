@@ -87,5 +87,35 @@ int main() {
     file.close();
     cout << "success1" << endl;
 
-    return 0;
+     //TODO: Use this to create a .csv file of nodes
+//    ofstream file3("test.csv");
+//    if (!file3.is_open()) {
+//        std::cerr << "Error opening file" << std::endl;
+//        return 1;
+//    }
+//    file3 << "Node id, latitude, longitude, adjacent ids\n";
+//    for (auto& n : graph.nodes) {
+//        file3 << n.first << "," << n.second->latitude << "," << n.second->longitude << ",";
+//        for (auto& n2 : graph.adjacency[n.first]) {
+//            file3 << n2.first << " ";
+//        }
+//        file3 << "\n";
+//    }
+//    file3.close();
+
+//    float num1 = 30.477;
+//    float num2 = -81.5508;
+//    float num3 = 29.6561;
+//    float num4 = -82.3242;
+//    pair<float, float> p1 = make_pair(num1, num2);
+//    pair<float, float> p2 = make_pair(num3, num4);
+    //TODO: this is the test code for dijkstra
+//    long long num1 = 1326389497;
+//    long long num2 = 1326389461;
+//    vector<pair<float, float>> testy = graph.dijkstraSearch(num1, num2);
+//    for (auto& v : testy) {
+//        cout << v.first << " " << v.second << ",";
+//    }
+//
+//    return 0;
 }

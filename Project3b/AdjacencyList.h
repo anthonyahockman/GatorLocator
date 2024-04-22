@@ -11,6 +11,7 @@
 #include <string>
 #include <queue>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 
@@ -28,6 +29,7 @@ struct Way {
 };
 
 class AdjacencyList {
+public:
     // store nodes with list of neighbors
     // the inner map has key of an adjacent node and the oms_id for the edge
     unordered_map<long long, unordered_map<long long, long long>> adjacency;
@@ -42,7 +44,7 @@ public:
     bool insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type);
     bool isNode(long long &id);
     bool isEdge(long long &osm_id);
-    vector<pair<float, float>> dijkstraSearch(pair<float, float> &start, pair<float, float> &end);
+    vector<pair<float, float>> dijkstraSearch(long long &startID, long long &endID);
     int getSpeed(long long &id);
 };
 
