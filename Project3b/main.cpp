@@ -82,20 +82,21 @@ int main() {
 
 
     cout << "Performing Dijkstra's Search Algorithm..." << endl;
-    long long n1 = 1326389497;
-    long long n2 = 1326389461;
+    long long n1 = 1326389497;//first node
+    long long n2 = 1326389461;//second node
 
-
+    //do dijkstras
     vector<pair<float,float>> v = graph.dijkstraSearch(n1,n2);
     cout << "Dijkstra's Search Finished:" << endl;
-    for (auto p : v) {
+    for (auto p : v) {//print results
         cout << setprecision(9) << p.first << ", " << p.second << endl;
     }
 
+    //do A*
     cout << "\nPerforming A* Search Algorithm..." << endl;
     v = graph.AStar(n1,n2);
     cout << "A* Search Finished:" << endl;
-    for (auto p : v) {
+    for (auto p : v) {//print results
         cout << setprecision(9) << p.first << ", " << p.second << endl;
     }
 
