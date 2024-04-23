@@ -8,8 +8,8 @@ AdjacencyList::AdjacencyList() {
 }
 
 bool AdjacencyList::insertNode(long long &id, double &longitude, double &latitude) {
-    if (isNode(id)) {
-        Node* Node1 = new Node;
+    if (isNode(id)) {//check that the node is in the list
+        Node* Node1 = new Node;//define a new node
         Node1->id = id;
         Node1->longitude = longitude;
         Node1->latitude = latitude;
@@ -21,8 +21,9 @@ bool AdjacencyList::insertNode(long long &id, double &longitude, double &latitud
     return false;
 }
 
+//attempts to insert an edge into the adjacency list
 bool AdjacencyList::insertEdge(long long &from, long long &to, string &osm_id, double &length, string &type) {
-    if (!isEdge(osm_id)) {
+    if (!isEdge(osm_id)) {//check that it is not an edge first
         Way* Way1 = new Way;
         Way1->osm_id = osm_id;
         Way1->length = length;
@@ -35,6 +36,7 @@ bool AdjacencyList::insertEdge(long long &from, long long &to, string &osm_id, d
     return false;
 }
 
+//determines if the given osm id is a node in the adjacency list
 bool AdjacencyList::isNode(long long &id) {
     if (adjacency.find(id) != adjacency.end()) {
         return true;
@@ -42,6 +44,7 @@ bool AdjacencyList::isNode(long long &id) {
     return false;
 }
 
+//determines if the given osmID is an edge in the edge list
 bool AdjacencyList::isEdge(string &osm_id) {
     if (edges.find(osm_id) != edges.end()) {
         return true;
@@ -49,19 +52,8 @@ bool AdjacencyList::isEdge(string &osm_id) {
     return false;
 }
 
-// TODO: this needs to be tested
 vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long startID, long long endID) {
-//    long long startID;
-//    long long endID;
-//    // determine the actual id of each point based on latitude and longitude inputs
-//    for (const auto& pair: nodes) {
-//        if (pair.second->latitude == start.first && pair.second->longitude == start.second) {
-//            startID = pair.second->id;
-//        }
-//        if (pair.second->latitude == end.first && pair.second->longitude == end.second) {
-//            endID = pair.second->id;
-//        }
-//    }
+
     // define a type of data for the priority queue
     typedef pair<double, long long> w;
     // start the priority queue
@@ -126,24 +118,28 @@ vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long startID, long
 
 vector<pair<float, float>> AdjacencyList::AStar(long long startID, long long endID) {
 
-    //id, f(x)
-    unordered_map<long long, float> open;
-    unordered_map<long long, float> closed;
+    //Maps have keys that are ID's and values that are the heurisitc function value, f(x)
+    unordered_map<long long, float> open;//calculated
+    unordered_map<long long, float> closed;//to be calculated
     unordered_map<long long, float> gValues;
     unordered_map<long long, long long> parent;
 
 
+    //Assign the max float value as inf for each g(x) value
     for (auto& v : nodes) {
         gValues.emplace(v.first, numeric_limits<float>::max());
     }
 
+    //place the starting node in the open list with an f(x) value of 0
     open.emplace(startID,0);//f is 0
     gValues[startID] = 0;
 
+    //While the open list is not empty
     while (!open.empty()) {
-        long long currentNode = open.begin()->first;
-        float minF = open[currentNode];
+        long long currentNode = open.begin()->first;//current node to explore
+        float minF = open[currentNode];//f(x) value for the current node
 
+        //determine if any other nodes in open have a smaller f(x) value
         for (auto p : open) {
             if (p.second < minF) {
                 currentNode = p.first;
@@ -151,34 +147,43 @@ vector<pair<float, float>> AdjacencyList::AStar(long long startID, long long end
             }
         }
 
+        //remove the current node from open
         open.erase(currentNode);
 
+        //if the current node is the end of the path, we are done
         if (currentNode == endID) {
             break;
         }
 
+        //for each adjacent node connect to the current node by an edge
         for (auto successor : adjacency[currentNode]) {
+            //calculate the total cost of travelling to it
             float successorCost = gValues[currentNode] + edges[successor.second]->length * getSpeed(successor.second);
 
+            //Check if the node is in open
             if (open.find(successor.first) != open.end()) {
-                if (gValues[successor.first] <= successorCost) {
-                    continue;
+                if (gValues[successor.first] <= successorCost) {//if the current travel cost is less than the new one
+                    continue;//forget it
                 }
-            } else if (closed.find(successor.first) != closed.end()) {
-                if (gValues[successor.first] <= successorCost) {
-                    continue;
+            } else if (closed.find(successor.first) != closed.end()) {//check that the node is in closed
+                if (gValues[successor.first] <= successorCost) {//if the current travel cost is less than the new one
+                    continue;//forget it
                 }
+                //move from closed to open and update f(x) = g(x) + h(x)
                 closed.erase(successor.first);
                 open.emplace(successor.first,successorCost + abs(nodes[successor.first]->longitude - nodes[endID]->longitude) + abs(nodes[successor.first]->latitude - nodes[endID]->latitude));
             } else {
+                //add to open and update f(x) = g(x) + h(x)
                 open.emplace(successor.first,successorCost + abs(nodes[successor.first]->longitude - nodes[endID]->longitude) + abs(nodes[successor.first]->latitude - nodes[endID]->latitude));
             }
+            //update the g values
             gValues[successor.first] = successorCost;
+            //assign the current node as the parent to the adjacent one
             parent[successor.first] = currentNode;
         }
+        //add the current node to clsoed with its f(x) value
         closed.emplace(currentNode,minF);
     }
-    //TODO: Check that a path exists
 
     vector<long long> path;
     // add all of the nodes along the path starting from the end
@@ -201,6 +206,7 @@ vector<pair<float, float>> AdjacencyList::AStar(long long startID, long long end
     return path_ll;
 }
 
+//gets the speed liekly speed limit of the edge using the type of edge
 int AdjacencyList::getSpeed(string &id) {
     string roadType = edges[id]->type;
     int speed;
