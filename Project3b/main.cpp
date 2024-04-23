@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 #include "AdjacencyList.cpp"
 
 using namespace std;
@@ -82,6 +83,20 @@ int main() {
 
     file.close();
     cout << "success1" << endl;
+
+    long long n1 = 1326389497;
+    long long n2 = 1326389461;
+
+    cout << setprecision(9);
+    cout << "C1: " << graph.nodes[n1]->latitude << ", " << graph.nodes[n1]->longitude << endl;
+    cout << "C2: " << graph.nodes[n2]->latitude << ", " << graph.nodes[n2]->longitude << endl;
+
+
+
+    vector<pair<float,float>> v = graph.AStar(n1,n2);
+    for (auto p : v) {
+        cout << setprecision(9) << p.first << ", " << p.second << endl;
+    }
 
      //TODO: Use this to create a .csv file of nodes
 //    ofstream file3("test.csv");

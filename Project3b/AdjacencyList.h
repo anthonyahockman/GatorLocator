@@ -45,6 +45,7 @@ public:
     bool isNode(long long &id);
     bool isEdge(string &osm_id);
     vector<pair<float, float>> dijkstraSearch(long long startID, long long endID);
+    vector<pair<float, float>> AStar(long long startID, long long endID);
     int getSpeed(string &id);
 };
 

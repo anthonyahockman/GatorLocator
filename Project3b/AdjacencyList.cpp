@@ -124,6 +124,83 @@ vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long startID, long
     return path_ll;
 }
 
+vector<pair<float, float>> AdjacencyList::AStar(long long startID, long long endID) {
+
+    //id, f(x)
+    unordered_map<long long, float> open;
+    unordered_map<long long, float> closed;
+    unordered_map<long long, float> gValues;
+    unordered_map<long long, long long> parent;
+
+
+    for (auto& v : nodes) {
+        gValues.emplace(v.first, numeric_limits<float>::max());
+    }
+
+    open.emplace(startID,0);//f is 0
+    gValues[startID] = 0;
+
+    while (!open.empty()) {
+        long long currentNode = open.begin()->first;
+        float minF = open[currentNode];
+
+        for (auto p : open) {
+            if (p.second < minF) {
+                currentNode = p.first;
+                minF = p.second;
+            }
+        }
+
+        open.erase(currentNode);
+
+        if (currentNode == endID) {
+            break;
+        }
+
+        for (auto successor : adjacency[currentNode]) {
+            float successorCost = gValues[currentNode] + edges[successor.second]->length * getSpeed(successor.second);
+
+            if (open.find(successor.first) != open.end()) {
+                if (gValues[successor.first] <= successorCost) {
+                    continue;
+                }
+            } else if (closed.find(successor.first) != closed.end()) {
+                if (gValues[successor.first] <= successorCost) {
+                    continue;
+                }
+                closed.erase(successor.first);
+                open.emplace(successor.first,successorCost + abs(nodes[successor.first]->longitude - nodes[endID]->longitude) + abs(nodes[successor.first]->latitude - nodes[endID]->latitude));
+            } else {
+                open.emplace(successor.first,successorCost + abs(nodes[successor.first]->longitude - nodes[endID]->longitude) + abs(nodes[successor.first]->latitude - nodes[endID]->latitude));
+            }
+            gValues[successor.first] = successorCost;
+            parent[successor.first] = currentNode;
+        }
+        closed.emplace(currentNode,minF);
+    }
+    //TODO: Check that a path exists
+
+    vector<long long> path;
+    // add all of the nodes along the path starting from the end
+    for (long long v = endID; v != startID; v = parent[v]) {
+        path.push_back(v);
+    }
+    path.push_back(startID);
+    // reverse the vector
+    reverse(path.begin(), path.end());
+
+    // create a new vector for the longitude, latitude points
+    vector<pair<float, float>> path_ll;
+    // fill the path_ll vector
+    for (auto& v : path) {
+        double lat = nodes[v]->latitude;
+        double lon = nodes[v]->longitude;
+        path_ll.emplace_back(lat, lon);
+    }
+
+    return path_ll;
+}
+
 int AdjacencyList::getSpeed(string &id) {
     string roadType = edges[id]->type;
     int speed;
