@@ -7,13 +7,13 @@ AdjacencyList::AdjacencyList() {
     // keep in case we switch to a vector data structure to initialize it
 }
 
-bool AdjacencyList::insertNode(long long &id, float &longitude, float &latitude) {
+bool AdjacencyList::insertNode(long long &id, double &longitude, double &latitude) {
     if (isNode(id)) {
         Node* Node1 = new Node;
         Node1->id = id;
         Node1->longitude = longitude;
         Node1->latitude = latitude;
-        unordered_map<long long, long long> map1;
+        unordered_map<long long, string> map1;
         adjacency.emplace(id, map1);
         nodes.emplace(id, Node1);
         return true;
@@ -21,7 +21,7 @@ bool AdjacencyList::insertNode(long long &id, float &longitude, float &latitude)
     return false;
 }
 
-bool AdjacencyList::insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type) {
+bool AdjacencyList::insertEdge(long long &from, long long &to, string &osm_id, double &length, string &type) {
     if (!isEdge(osm_id)) {
         Way* Way1 = new Way;
         Way1->osm_id = osm_id;
@@ -42,7 +42,7 @@ bool AdjacencyList::isNode(long long &id) {
     return false;
 }
 
-bool AdjacencyList::isEdge(long long &osm_id) {
+bool AdjacencyList::isEdge(string &osm_id) {
     if (edges.find(osm_id) != edges.end()) {
         return true;
     }
@@ -50,7 +50,7 @@ bool AdjacencyList::isEdge(long long &osm_id) {
 }
 
 // TODO: this needs to be tested
-vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long &startID, long long &endID) {
+vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long startID, long long endID) {
 //    long long startID;
 //    long long endID;
 //    // determine the actual id of each point based on latitude and longitude inputs
@@ -92,7 +92,7 @@ vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long &startID, lon
 
         for (auto& neighbor : adjacency[id]) {
             long long v = neighbor.first;
-            long long osm = neighbor.second;
+            string osm = neighbor.second;
             double w = edges[osm]->length * getSpeed(osm);
             // Only replace if the id distance + weight is less than the current distance to a node/vertex
             if (distance[id] + w < distance[v]) {
@@ -124,7 +124,7 @@ vector<pair<float, float>> AdjacencyList::dijkstraSearch(long long &startID, lon
     return path_ll;
 }
 
-int AdjacencyList::getSpeed(long long &id) {
+int AdjacencyList::getSpeed(string &id) {
     string roadType = edges[id]->type;
     int speed;
     if (roadType == "Motorway") {

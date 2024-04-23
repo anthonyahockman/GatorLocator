@@ -17,12 +17,12 @@ using namespace std;
 
 struct Node {
     long long id;
-    float longitude;
-    float latitude;
+    double longitude;
+    double latitude;
 };
 
 struct Way {
-    long long osm_id;
+    string osm_id;
     double length;
     string type;
     //list<pair<float, float>> directions;
@@ -32,20 +32,20 @@ class AdjacencyList {
 public:
     // store nodes with list of neighbors
     // the inner map has key of an adjacent node and the oms_id for the edge
-    unordered_map<long long, unordered_map<long long, long long>> adjacency;
+    unordered_map<long long, unordered_map<long long, string>> adjacency;
     // keep track of nodes and corresponding ids
     unordered_map<long long, Node*> nodes;
     // store the list of edges with edge_id as the key
     // the list is the latitude, longitude way data from OSM
-    unordered_map<long long, Way*> edges;
+    unordered_map<string, Way*> edges;
 public:
     AdjacencyList();
-    bool insertNode(long long &id, float &longitude, float &latitude);
-    bool insertEdge(long long &from, long long &to, long long &osm_id, double &length, string &type);
+    bool insertNode(long long &id, double &longitude, double &latitude);
+    bool insertEdge(long long &from, long long &to, string &osm_id, double &length, string &type);
     bool isNode(long long &id);
-    bool isEdge(long long &osm_id);
-    vector<pair<float, float>> dijkstraSearch(long long &startID, long long &endID);
-    int getSpeed(long long &id);
+    bool isEdge(string &osm_id);
+    vector<pair<float, float>> dijkstraSearch(long long startID, long long endID);
+    int getSpeed(string &id);
 };
 
 

@@ -34,10 +34,6 @@ int main() {
             getline(ss2, component, ',');
         }
         getline(ss2, component, ')');
-        // if the way entry is a copy of another one, skip it
-        if (components[0].find("-0")==string::npos) {
-            continue;
-        }
         // if the "way" is actually just a POI, skip it
         if (component.find(',')==string::npos) {
             continue;
@@ -49,7 +45,7 @@ int main() {
 
         long long from = stoll(components[2]);
         long long to = stoll(components[3]);
-        long long osm_id = stoll(components[1]);
+        string osm_id = components[0];
         double length = stod(components[4]);
         string type = components[6];
 
@@ -76,8 +72,8 @@ int main() {
             components.push_back(component);
         }
         long long id = stoll(components[0]);
-        float lon = stof(components[1]);
-        float lat = stof(components[2]);
+        double lon = stod(components[1]);
+        double lat = stod(components[2]);
 //        if (!graph.isNode(id)) {
 //            continue;
 //        }
@@ -110,12 +106,18 @@ int main() {
 //    pair<float, float> p1 = make_pair(num1, num2);
 //    pair<float, float> p2 = make_pair(num3, num4);
     //TODO: this is the test code for dijkstra
-//    long long num1 = 1326389497;
-//    long long num2 = 1326389461;
+//    long long num1 = 5307728890;
+//    long long num2 = 27049669;
+//    double num1 = 29.652197899999997;
+//    double num2 = -82.349704;
+//    double num3 = 29.6531907;
+//    double num4 = -82.3462934;
+//    pair<double, double> p1 = make_pair(num1, num2);
+//    pair<double, double> p2 = make_pair(num3, num4);
 //    vector<pair<float, float>> testy = graph.dijkstraSearch(num1, num2);
 //    for (auto& v : testy) {
 //        cout << v.first << " " << v.second << ",";
 //    }
-//
-//    return 0;
+
+    return 0;
 }
